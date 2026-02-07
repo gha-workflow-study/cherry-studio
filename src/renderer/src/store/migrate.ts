@@ -3214,9 +3214,24 @@ const migrateConfig = {
       if (state.paintings && !state.paintings.ppio_edit) {
         state.paintings.ppio_edit = []
       }
+      logger.info('migrate 196 success')
       return state
     } catch (error) {
       logger.error('migrate 196 error', error as Error)
+      return state
+    }
+  },
+  '197': (state: RootState) => {
+    try {
+      state.llm.providers.forEach((provider) => {
+        if (provider.type === 'ollama') {
+          provider.anthropicApiHost = provider.apiHost || 'http://localhost:11434'
+        }
+      })
+      logger.info('migrate 197 success')
+      return state
+    } catch (error) {
+      logger.error('migrate 197 error', error as Error)
       return state
     }
   }
